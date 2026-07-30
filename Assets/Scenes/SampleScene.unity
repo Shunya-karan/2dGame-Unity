@@ -366,9 +366,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1170194157}
+  - component: {fileID: 1170194160}
   - component: {fileID: 1170194156}
   - component: {fileID: 1170194158}
-  - component: {fileID: 1170194160}
   - component: {fileID: 1170194159}
   m_Layer: 0
   m_Name: Circle
@@ -446,8 +446,8 @@ Transform:
   m_GameObject: {fileID: 1170194155}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.62, y: 3.8, z: 0}
-  m_LocalScale: {x: 1.222548, y: 1.0928053, z: 1}
+  m_LocalPosition: {x: 3.7822, y: 3.6986, z: 0}
+  m_LocalScale: {x: 1.5470123, y: 1.29563, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -527,8 +527,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fa515bb41fdb344eb0d31fc3529fe2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::player
-  rb: {fileID: 0}
-  xInput: 0
+  movementSpeed: 3.5
+  jumpForce: 8
 --- !u!1 &1766242263
 GameObject:
   m_ObjectHideFlags: 0
