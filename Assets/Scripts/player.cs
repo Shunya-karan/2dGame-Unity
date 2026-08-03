@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class player : MonoBehaviour
@@ -9,51 +10,79 @@ public class player : MonoBehaviour
     private float xInput;
     [SerializeField]private float movementSpeed= 3.5f;
     [SerializeField]private float jumpForce= 8;
+    private bool isJumping;
 
+    [SerializeField] private bool facingRight=true;
     
-    
-    void Start()
+
+    private void Awake()
     {
         rb=GetComponent<Rigidbody2D>();
         anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         HandleInput();
         HandleMovement();
         HandleAnimations();
+        PlayerFlipping();
     }
 
-
-
-    private void HandleInput()
+//Moving Player Horizontally
+    private void HandleMovement()
     {
         xInput = Input.GetAxisRaw("Horizontal");
-
-         if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Jump();
-        }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            Jump();
-        }
+        rb.linearVelocity = new Vector2(xInput * movementSpeed, rb.linearVelocityY);
     }
-    private void Jump()
-    {
+   
+    private void Jump(){
         rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpForce);
     }
 
-    private void HandleMovement()
-    {
-        rb.linearVelocity = new Vector2(xInput * movementSpeed, rb.linearVelocityY);
+    private void HandleInput(){
+         if (Input.GetKeyDown(KeyCode.Space) && !isJumping)
+        {
+            Jump();
+            isJumping=true;
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow) && !isJumping)
+        {
+            Jump();
+            isJumping=true;
+        }
     }
-        
+    
     private void HandleAnimations()
     {
-        bool isMoving= rb.linearVelocityX!=0;
-        anim.SetBool("isMoving",isMoving);
+        anim.SetFloat("xVelocity",rb.linearVelocityX);
+        anim.SetFloat("yVelocity",rb.linearVelocityY);
+        anim.SetBool("isGrounded",GameObject.FindGameObjectWithTag("Ground"));
+    }
+    
+    private void PlayerFlipping()
+    {
+        if(rb.linearVelocityX>0 && facingRight == false)
+        {
+            Flip();
+        }
+        else if (rb.linearVelocityX<0 && facingRight == true)
+        {
+            Flip();
+        }
+    
+    }
+    private void Flip()
+    {
+        transform.Rotate(0,180,0);
+        facingRight = !facingRight;
+    }
+
+    public void OnCollisionEnter2D(Collision2D other)
+    {
+        if(other.gameObject.CompareTag("Ground"))
+            isJumping=false;
+
     }
 }
