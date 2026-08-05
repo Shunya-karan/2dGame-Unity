@@ -8,9 +8,11 @@ public class player : MonoBehaviour
     private Animator anim;
     
     private float xInput;
-    [SerializeField]private float movementSpeed= 3.5f;
-    [SerializeField]private float jumpForce= 8;
+    [SerializeField]private float movementSpeed;
+    [SerializeField]private float jumpForce;
     private bool isJumping;
+    private bool canMove=true;
+    private bool canJump=true;
 
     [SerializeField] private bool facingRight=true;
     
@@ -30,37 +32,58 @@ public class player : MonoBehaviour
         PlayerFlipping();
     }
 
-//Moving Player Horizontally
+
+    public void EnableMovementAndJump(bool enable)
+    {
+        canJump=enable;
+        canMove=enable;
+    }
+    private void HandleInput(){
+         xInput = Input.GetAxisRaw("Horizontal");
+
+        if (Input.GetKeyDown(KeyCode.UpArrow) && !isJumping)
+        {
+            Jump();
+            isJumping=true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            TryToAttack();
+        }
+    }
+    
+    private void TryToAttack()
+    {
+        if (!isJumping)
+        {
+            anim.SetTrigger("attack");
+        }
+        
+    }
+    private void HandleAnimations()
+    {
+        anim.SetFloat("xVelocity",Math.Abs(rb.linearVelocityX));
+        anim.SetFloat("yVelocity",rb.linearVelocityY);
+        anim.SetBool("isJumping",isJumping);
+    }
+
+    
+    //Moving Player Horizontally
     private void HandleMovement()
     {
-        xInput = Input.GetAxisRaw("Horizontal");
-        rb.linearVelocity = new Vector2(xInput * movementSpeed, rb.linearVelocityY);
+        if (canMove)
+            rb.linearVelocity = new Vector2(xInput * movementSpeed, rb.linearVelocityY);
+        
+        
     }
    
     private void Jump(){
-        rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpForce);
+        if(!isJumping && canJump)
+            rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpForce);
+        else
+             rb.linearVelocity = new Vector2(0, jumpForce);
     }
-
-    private void HandleInput(){
-         if (Input.GetKeyDown(KeyCode.Space) && !isJumping)
-        {
-            Jump();
-            isJumping=true;
-        }
-        else if (Input.GetKeyDown(KeyCode.UpArrow) && !isJumping)
-        {
-            Jump();
-            isJumping=true;
-        }
-    }
-    
-    private void HandleAnimations()
-    {
-        anim.SetFloat("xVelocity",rb.linearVelocityX);
-        anim.SetFloat("yVelocity",rb.linearVelocityY);
-        anim.SetBool("isGrounded",GameObject.FindGameObjectWithTag("Ground"));
-    }
-    
     private void PlayerFlipping()
     {
         if(rb.linearVelocityX>0 && facingRight == false)
@@ -79,7 +102,7 @@ public class player : MonoBehaviour
         facingRight = !facingRight;
     }
 
-    public void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
         if(other.gameObject.CompareTag("Ground"))
             isJumping=false;
