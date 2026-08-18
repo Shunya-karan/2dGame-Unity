@@ -13,6 +13,7 @@ public class player : MonoBehaviour
     private bool isJumping;
     private bool canMove=true;
     private bool canJump=true;
+    
 
     [SerializeField] private bool facingRight=true;
     
