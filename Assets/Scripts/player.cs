@@ -7,6 +7,7 @@ public class player : MonoBehaviour
     private Rigidbody2D rb ; 
     private Animator anim;
     
+    public Collider2D[] coliders;
     private float xInput;
     [SerializeField]private float movementSpeed;
     [SerializeField]private float jumpForce;
