@@ -7,7 +7,11 @@ public class player : MonoBehaviour
     private Rigidbody2D rb ; 
     private Animator anim;
     
-    public Collider2D[] coliders;
+    // public Collider2D[] enemyColiders;
+    [Header("Attack details")]
+    [SerializeField] private float attackRadius;
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private LayerMask whatIsEnemy;
     private float xInput;
     [SerializeField]private float movementSpeed;
     [SerializeField]private float jumpForce;
@@ -34,6 +38,15 @@ public class player : MonoBehaviour
         PlayerFlipping();
     }
 
+    public void DamageEnemies()
+    {
+       Collider2D[] enemyColiders = Physics2D.OverlapCircleAll(attackPoint.position,attackRadius, whatIsEnemy);
+
+       foreach (Collider2D enemy in enemyColiders)
+       {
+        enemy.GetComponent<Enemy>().TakeDamage();
+       }
+    }
 
     public void EnableMovementAndJump(bool enable)
     {
@@ -70,13 +83,11 @@ public class player : MonoBehaviour
         anim.SetBool("isJumping",isJumping);
     }
 
-    
     //Moving Player Horizontally
     private void HandleMovement()
     {
         if (canMove)
             rb.linearVelocity = new Vector2(xInput * movementSpeed, rb.linearVelocityY);
-        
         
     }
    
@@ -109,5 +120,10 @@ public class player : MonoBehaviour
         if(other.gameObject.CompareTag("Ground"))
             isJumping=false;
 
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(attackPoint.position,attackRadius);
     }
 }

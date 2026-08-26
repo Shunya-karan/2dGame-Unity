@@ -9,6 +9,7 @@ public class attackEvent : MonoBehaviour
         player = GetComponentInParent<player>();
     }
 
+    public void DamageEnemies()=>player.DamageEnemies();
     private void DisableMovementAndJump() => player.EnableMovementAndJump(false);
     private void EnableMovementAndJump() => player.EnableMovementAndJump(true);
 
