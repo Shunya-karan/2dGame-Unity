@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class coolDownExample : MonoBehaviour
 {
     private SpriteRenderer sr;
     [SerializeField] private float redColorDuration=1;
