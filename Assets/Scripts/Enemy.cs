@@ -7,8 +7,8 @@ public class Enemy : MonoBehaviour
     private SpriteRenderer sr;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-    public float moveSpeed;
-    public String enemyName;
+    [SerializeField] protected float moveSpeed;
+    [SerializeField] protected String enemyName;
     
     void Awake()
     {
@@ -24,17 +24,22 @@ public class Enemy : MonoBehaviour
 
     private void MoveAround()
     {
-        Debug.Log(enemyName+"moves at speed"+moveSpeed);
+        // Debug.Log(enemyName+"moves at speed"+moveSpeed);
     }
 
-    private void Attack()
+    protected virtual void Attack()
     {
-        Debug.Log(enemyName+ " attacks");
+        // Debug.Log(enemyName+ " attacks");
         
     }
 
     public void TakeDamage()
     {
-        sr.color = Color.red;
+        // sr.color = Color.red;
+    }
+
+    public String getEnemyName()
+    {
+        return enemyName;
     }
 }
