@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class attackEvent : MonoBehaviour
 {
-    private player player;
+    private Entity player;
 
     private void Awake()
     {
-        player = GetComponentInParent<player>();
+        player = GetComponentInParent<Entity>();
     }
 
     public void DamageEnemies()=>player.DamageEnemies();

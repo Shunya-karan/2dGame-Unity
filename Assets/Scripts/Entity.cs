@@ -1,20 +1,20 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class player : MonoBehaviour
+public class Entity : MonoBehaviour
 {
-    private Rigidbody2D rb ; 
-    private Animator anim;
+    protected Rigidbody2D rb ; 
+    protected Animator anim;
     
     // public Collider2D[] enemyColiders;
     [Header("Attack details")]
     [SerializeField] private float attackRadius;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private LayerMask whatIsEnemy;
-    private float xInput;
     [SerializeField]private float movementSpeed;
     [SerializeField]private float jumpForce;
+
+    private float xInput;
     private bool isJumping;
     private bool canMove=true;
     private bool canJump=true;
@@ -42,14 +42,14 @@ public class player : MonoBehaviour
     {
        Collider2D[] enemyColiders = Physics2D.OverlapCircleAll(attackPoint.position,attackRadius, whatIsEnemy);
 
-       foreach (Collider2D enemy in enemyColiders)
-       {
-        Enemy enemyScript = enemy.GetComponent<Enemy>();
-        enemyScript.TakeDamage();
+    //    foreach (Collider2D enemy in enemyColiders)
+    //    {
+    //     Enemy enemyScript = enemy.GetComponent<Enemy>();
+    //     enemyScript.TakeDamage();
 
-        String enemyName = enemyScript.getEnemyName();
-        Debug.Log("AttAck on "+enemyName);
-       }
+    //     String enemyName = enemyScript.getEnemyName();
+    //     Debug.Log("AttAck on "+enemyName);
+    //    }
     }
 
     public void EnableMovementAndJump(bool enable)
