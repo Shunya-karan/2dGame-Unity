@@ -203,7 +203,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Animator
+  m_Name: Player
   serializedVersion: 6
   m_AnimatorParameters:
   - m_Name: isJumping

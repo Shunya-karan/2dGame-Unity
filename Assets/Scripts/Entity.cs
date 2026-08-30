@@ -8,18 +8,18 @@ public class Entity : MonoBehaviour
     
     // public Collider2D[] enemyColiders;
     [Header("Attack details")]
-    [SerializeField] private float attackRadius;
-    [SerializeField] private Transform attackPoint;
-    [SerializeField] private LayerMask whatIsEnemy;
-    [SerializeField]private float movementSpeed;
+    [SerializeField] protected float attackRadius;
+    [SerializeField] protected Transform attackPoint;
+    [SerializeField] protected LayerMask whatIsTarget;
+    [SerializeField]protected float movementSpeed;
     [SerializeField]private float jumpForce;
 
     private float xInput;
     private bool isJumping;
-    private bool canMove=true;
+    protected bool canMove=true;
     private bool canJump=true;
-    
 
+    protected int facingDir = 1;
     [SerializeField] private bool facingRight=true;
     
 
@@ -30,26 +30,24 @@ public class Entity : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void Update()
+    protected virtual void Update()
     {
         HandleInput();
         HandleMovement();
         HandleAnimations();
-        PlayerFlipping();
+        HandleFlipping();
     }
 
-    public void DamageEnemies()
+    public void DamageTarget()
     {
-       Collider2D[] enemyColiders = Physics2D.OverlapCircleAll(attackPoint.position,attackRadius, whatIsEnemy);
+       Collider2D[] enemyColiders = Physics2D.OverlapCircleAll(attackPoint.position,attackRadius, whatIsTarget);
 
-    //    foreach (Collider2D enemy in enemyColiders)
-    //    {
-    //     Enemy enemyScript = enemy.GetComponent<Enemy>();
-    //     enemyScript.TakeDamage();
+       foreach (Collider2D enemy in enemyColiders)
+       {
+        Entity entityTarget = enemy.GetComponent<Entity>();
+        entityTarget.DamageTarget();
 
-    //     String enemyName = enemyScript.getEnemyName();
-    //     Debug.Log("AttAck on "+enemyName);
-    //    }
+    }
     }
 
     public void EnableMovementAndJump(bool enable)
@@ -57,7 +55,7 @@ public class Entity : MonoBehaviour
         canJump=enable;
         canMove=enable;
     }
-    private void HandleInput(){
+    protected void HandleInput(){
          xInput = Input.GetAxisRaw("Horizontal");
 
         if (Input.GetKeyDown(KeyCode.UpArrow) && !isJumping)
@@ -72,7 +70,7 @@ public class Entity : MonoBehaviour
         }
     }
     
-    private void TryToAttack()
+    protected virtual void TryToAttack()
     {
         if (!isJumping)
         {
@@ -80,7 +78,8 @@ public class Entity : MonoBehaviour
         }
         
     }
-    private void HandleAnimations()
+
+    protected void HandleAnimations()
     {
         anim.SetFloat("xVelocity",Math.Abs(rb.linearVelocityX));
         anim.SetFloat("yVelocity",rb.linearVelocityY);
@@ -88,7 +87,7 @@ public class Entity : MonoBehaviour
     }
 
     //Moving Player Horizontally
-    private void HandleMovement()
+    protected virtual void HandleMovement()
     {
         if (canMove)
             rb.linearVelocity = new Vector2(xInput * movementSpeed, rb.linearVelocityY);
@@ -101,7 +100,7 @@ public class Entity : MonoBehaviour
         else
              rb.linearVelocity = new Vector2(0, jumpForce);
     }
-    private void PlayerFlipping()
+    protected void HandleFlipping()
     {
         if(rb.linearVelocityX>0 && facingRight == false)
         {
@@ -117,9 +116,10 @@ public class Entity : MonoBehaviour
     {
         transform.Rotate(0,180,0);
         facingRight = !facingRight;
+        facingDir = facingDir*-1;
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    protected virtual void OnCollisionEnter2D(Collision2D other)
     {
         if(other.gameObject.CompareTag("Ground"))
             isJumping=false;
