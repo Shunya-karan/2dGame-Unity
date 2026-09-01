@@ -46,5 +46,11 @@ public class Enemy : Entity
             attackPoint.position,attackRadius,whatIsTarget
         );
     }
+
+    protected override void Die()
+    {
+        base.Die();
+        UI.instance.AddKillCount();
+    }
 }
 
