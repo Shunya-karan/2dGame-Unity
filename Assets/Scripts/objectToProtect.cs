@@ -29,4 +29,11 @@ public class objectToProtect : Entity
             Flip();
         }
     }
+
+
+    protected override void Die()
+    {
+        base.Die();
+        UI.instance.EnableGameOverUi();
+    }
 }
